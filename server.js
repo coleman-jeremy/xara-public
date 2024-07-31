@@ -1,9 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const fetch = require('node-fetch');
 const {Storage} = require('@google-cloud/storage');
-require('dotenv').config();
+const cors = require('cors');
+
+console.log('API Key:', process.env.ANTHROPIC_API_KEY);
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
