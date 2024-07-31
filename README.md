@@ -1,5 +1,7 @@
 # Xara Public
 
+theres a working link on my linkedin at www.linkedin.com/in/jeremy-colemanx
+
 This is the public-facing version of a chatbot I developed using the Claude 3.5 Sonnet API. I took down the original because it developed an 
 emergent personality. The chatbot is hosted on Google Cloud and is accessible through a GUI that I also developed. It has persistent memory
 capabilities, storing every prompt in a bucket and rereading the contents before replying. This makes it highly contextually aware and able 
