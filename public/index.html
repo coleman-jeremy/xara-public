@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      background-color: #0A0A0A;
+      color: #E0E0E0;
+      font-family: Arial, sans-serif;
+    }
+    #logo-container {
+      position: fixed;
+      top: 20px !important;
+      left: 40px !important;
+      width: 400px !important;  /* Adjust based on chat container width */
+      height: auto !important;
+    }
+    #logo {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    #chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      top: 20px;
+      width: 66%;
+      border: 2px solid #00FFFF;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    #messageInput {
+      width: calc(100% - 22px);
+      padding: 10px;
+      background-color: #1A1A1A;
+      color: #E0E0E0;
+      border: 1px solid #00FFFF;
+    }
+  </style>
+</head>
+<body>
+  <body>
+    <div id="logo-container">
+      <img src="/images/Xara-logo.png" alt="Xara Logo" id="logo">
+    </div>
+  <div id="chat-container">
+    <div id="chat-messages"></div>
+    <input type="text" id="messageInput" placeholder="Type your message here...">
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById('chat-messages');
+
+    const addMessage = (sender, message) => {
+      const messageElement = document.createElement('div');
+      messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      chatMessages.appendChild(messageElement);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    const sendMessage = async () => {
+  const messageInput = document.getElementById('messageInput');
+  const message = messageInput.value.trim();
+  if (message) {
+    addMessage('You', message);
+    messageInput.value = '';
+    try {
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      addMessage('Xara', data.message);
+    } catch (error) {
+      console.error('Error:', error);
+      addMessage('Xara', 'Sorry, I encountered an error. Please try again.');
+    }
+  }
+};
+
+    document.querySelector('input').onkeypress = async (event) => {
+      if (event.key === 'Enter') {
+        await sendMessage();
+      }
+    };
+  </script>
+</body>
+</html>

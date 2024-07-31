@@ -1,0 +1,11 @@
+runtime: nodejs20
+
+env_variables:
+  API_KEY: ${API_KEY}
+
+handlers:
+- url: /public
+  static_dir: public
+
+- url: /.*
+  script: autonpm install @google-cloud/storage
